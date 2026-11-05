@@ -56,9 +56,6 @@ and where the writing will appear if those are unclear from the text.
    information and that claims match the supplied facts.
 4. Compare the edit with the source and run the checker again.
 
-Using another model provides another editing pass. It doesn't guarantee better
-writing. Review the result for changed facts and lost context before accepting it.
-
 ### Use as an agent skill
 
 For Claude Code, copy this folder to `~/.claude/skills/slopmonster/` and invoke
