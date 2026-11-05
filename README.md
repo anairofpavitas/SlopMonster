@@ -8,7 +8,8 @@ a script.
 
 The Python checker reports matches in five categories and gives the text a score
 out of 5. The editing workflow asks an AI agent to review the draft for its intended
-reader, revise it, and request another pass from a different model family.
+reader, revise it, and check it again. This fork removes the second-model step, so
+drafts stay with the agent you are already using and nothing goes to another model.
 
 A score of 5/5 means the checker found no scored matches. You still need to review
 whether the text makes sense, supports its claims and gives the reader what they
@@ -53,32 +54,7 @@ and where the writing will appear if those are unclear from the text.
    how to use it. An email should make its reason for writing clear.
 3. Rewrite unclear or repetitive passages. Check that each sentence adds useful
    information and that claims match the supplied facts.
-4. Request a second editing pass from a different model family, then inspect the
-   changes and run the checker again.
-
-The second pass uses [prompts/cleanse.txt](prompts/cleanse.txt). With a supported AI
-command-line tool (CLI) installed and authenticated, run:
-
-```bash
-# If Claude wrote the draft, use Codex for the second pass.
-DESLOP_WRITER=claude tools/cleanse.sh draft.md > cleansed.md
-
-# If GPT wrote the draft, use Claude for the second pass.
-DESLOP_WRITER=gpt tools/cleanse.sh draft.md > cleansed.md
-
-# Read the edited file, then check it as Markdown.
-python3 tools/deslop.py cleansed.md
-```
-
-Run the command for the family that wrote your draft. The script writes edited
-copy to standard output and change notes to standard error. It uses the installed
-CLI's configured model.
-
-If the required CLI is missing, the script prints the editing prompt and draft,
-then exits with status 127. Paste that output into the other model family's chat.
-A timeout exits with status 124. Check the exit status before treating the output
-file as an edited draft. A warning about a missing notes marker means the response
-may include change notes in the copy.
+4. Compare the edit with the source and run the checker again.
 
 Using another model provides another editing pass. It doesn't guarantee better
 writing. Review the result for changed facts and lost context before accepting it.
@@ -157,7 +133,6 @@ repository rules or deployment configuration.
 
 ```bash
 python3 tools/test_deslop.py
-bash tools/test_cleanse.sh
 python3 tools/deslop.py README.md
 ```
 

@@ -1,6 +1,6 @@
 ---
 name: slopmonster
-description: Review writing for its intended reader, check common AI writing patterns, revise, request a second pass from a different model family, and check again. Trigger on /slopmonster, "humanize this", "de-slop this", "does this sound like AI", "fix this copy".
+description: Review writing for its intended reader, check common AI writing patterns, revise, and check again. Trigger on /slopmonster, "humanize this", "de-slop this", "does this sound like AI", "fix this copy".
 ---
 
 # SlopMonster
@@ -61,53 +61,19 @@ The checker can flag valid language. Review the actual match before editing it.
 Never hide ordinary prose in code formatting to raise the score. If a necessary
 phrase still triggers a rule, explain the remaining finding to the user.
 
-## Step 3: Request a second editing pass
-
-Use a different model family from the one that wrote the draft. This provides a
-second review with the same audience and purpose; inspect its suggestions before
-accepting them.
-
-| Draft written with | Command |
-|---|---|
-| Claude | `DESLOP_WRITER=claude tools/cleanse.sh draft.md > cleansed.md` |
-| GPT / Codex / ChatGPT | `DESLOP_WRITER=gpt tools/cleanse.sh draft.md > cleansed.md` |
-| Gemini | Use either command to select an installed rival CLI. |
-
-The script uses the selected CLI's configured model and
-[prompts/cleanse.txt](prompts/cleanse.txt). The CLI must be installed and
-authenticated. If it is unavailable, use the prompt and draft in the other model
-family's chat. If a second model cannot be accessed, report that the pass was not
-completed and continue the editorial review and local checks.
-
-Standard output contains the edited copy. Standard error contains change notes.
-To keep both:
-
-```bash
-DESLOP_WRITER=gpt tools/cleanse.sh draft.md > cleansed.md 2> notes.txt
-```
-
-Check the command's exit status. A timeout returns 124. A missing rival CLI returns
-127 and prints the prompt and input as standard output; that output is not an
-edited draft. Other CLI failures also need to be resolved before using the file.
-
-The model separates its notes with `<<<SLOPMONSTER-NOTES>>>`. A warning about a
-missing marker means notes may have been included in the copy. Inspect the result.
-
-## Step 4: Compare the edit and check again
+## Step 3: Compare the edit and check again
 
 Compare the result with the source. Check facts and commands for changes, confirm
-that links and placeholders survived, and read the opening in context. Review the
-notes for deletions that may have removed necessary information.
+that links and placeholders survived, and read the opening in context.
 
 ```bash
-python3 tools/deslop.py cleansed.md
+python3 tools/deslop.py draft.md
 ```
 
 Aim to resolve the checker findings while preserving the intended meaning. Report
 any justified exceptions. The final editorial review is required even at 5/5.
 
-If you change a regex, run `python3 tools/test_deslop.py`. If you change the cleanse
-script, run `bash tools/test_cleanse.sh`.
+If you change a regex, run `python3 tools/test_deslop.py`.
 
 ## Factual claims
 
@@ -123,6 +89,5 @@ the warning while removing its score penalty.
 ## Output
 
 Return the rewritten copy or save the edited artifact as requested. Then give up
-to five short notes explaining substantive changes and the check results. State
-whether the second model pass completed. Keep any unresolved claims or remaining
+to five short notes explaining substantive changes and the check results. Keep any unresolved claims or remaining
 checker findings visible. Do not claim the edit proves human authorship.

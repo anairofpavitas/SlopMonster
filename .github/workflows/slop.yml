@@ -16,11 +16,6 @@ jobs:
       - name: Regression tests
         run: python3 tools/test_deslop.py
 
-      # The copy/notes split is what keeps the model's change notes out of
-      # cleansed.md. No model calls, so it runs here like any other unit test.
-      - name: Cleanse split tests
-        run: bash tools/test_cleanse.sh
-
       - name: Lint the README
         run: python3 tools/deslop.py README.md
 

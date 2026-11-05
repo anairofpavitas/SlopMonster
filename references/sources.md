@@ -36,11 +36,6 @@ purpose. A README should explain the project early. A sales page may need to
 establish a customer problem before describing the offer. Neither approach calls
 for invented evidence.
 
-## Second-model review
+## Limits
 
-The cleanse script routes a draft to a different model family using an installed
-CLI. It uses that CLI's configured model and does not pin a model version.
-
-This repository does not establish that a second model will produce a better
-edit. Compare the output with the draft for changes in meaning and run the checker
-again. The workflow makes no claim to prove human authorship or bypass AI detectors.
+The workflow makes no claim to prove human authorship or bypass AI detectors.
